@@ -3,10 +3,11 @@
 
 Vagrant.configure("2") do |config|
 
+  #config.vm.box = "dummy"
+  config.vm.box = "precise32"
   #config.vm.box = "precise-server-cloudimg-vagrant-amd64-disk1"
   config.vm.network :forwarded_port, host: 4567, guest: 80
 
-  config.vm.box = "dummy"
   config.vm.provider :aws do |aws, override|
     #aws.access_key_id     = ENV['STABENFELDT_AWS_ACCESS_KEY_ID']
     #aws.secret_access_key = ENV['STABENFELDT_SECRET_ACCESS_KEY']
