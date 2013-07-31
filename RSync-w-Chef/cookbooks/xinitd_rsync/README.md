@@ -1,13 +1,12 @@
 xinitd_rsync Cookbook
 =====================
-TODO: Enter the cookbook description here.
+Installs rsync on ubuntu
 
-e.g.
-This cookbook makes your favorite breakfast sandwhich.
+Can be used 
 
 Requirements
 ------------
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
+
 
 e.g.
 #### packages
@@ -36,20 +35,8 @@ e.g.
 
 Usage
 -----
-#### xinitd_rsync::default
-TODO: Write usage instructions for each cookbook.
+rsync -av --progress --inplace --rsh='ssh -p2222' * rsync@localhost:
 
-e.g.
-Just include `xinitd_rsync` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[xinitd_rsync]"
-  ]
-}
-```
 
 Contributing
 ------------

@@ -1,2 +1,2 @@
-default['xinetd']['rsync_username'] = 'backup'
-default['xinetd']['rsync_password'] = 'rsync'
+default[:xinetd][:rsync_username] = 'rsync'
+default[:xinetd][:rsync_password] = 'password'
