@@ -1,3 +1,5 @@
+cloud-rsync-storage
+===================
 == Create a cloud machine that can be used to store Rsync backups 
 
 == Requirements
@@ -9,4 +11,5 @@
   vagrant ssh
 
   sudo chpasswd rsync
+
 
