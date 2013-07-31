@@ -25,7 +25,6 @@ directory "/home/rsync/BACKUP/" do
 end
 
 
-
 template '/etc/xinetd.d/rsync' do
   source 'xinetd_rsync.txt.erb'
   owner 'root'
@@ -37,8 +36,3 @@ template '/etc/rsyncd.conf' do
   source 'rsync.conf.txt.erb'
   action :create
 end
-
-#template '/etc/rsyncd.secrets' do
-#  source 'rsync.secrets.txt.erb'
-#  action :create
-#end
