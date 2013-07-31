@@ -4,20 +4,20 @@
 Vagrant.configure("2") do |config|
 
   #config.vm.box = "precise-server-cloudimg-vagrant-amd64-disk1"
-  config.vm.network :forwarded_port, host: 4567, guest: 80
+  #config.vm.network :forwarded_port, host: 4567, guest: 80
 
   config.vm.box = "dummy"
-  config.vm.provider :aws do |aws, override|
-    #aws.access_key_id     = ENV['STABENFELDT_AWS_ACCESS_KEY_ID']
-    #aws.secret_access_key = ENV['STABENFELDT_SECRET_ACCESS_KEY']
-    aws.access_key_id     = ENV['MAKE_AWS_ACCESS_KEY_ID']
-    aws.secret_access_key = ENV['MAKE_AWS_SECRET_ACCESS_KEY']
-    #aws.keypair_name      = "make-martins"
-    aws.region            = "eu-west-1"
-    #override.ssh.private_key_path = "~/.ssh/make-martins.pem"
-    
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
-    aws.ami = "ami-7747d01e"
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id     = ENV['AMAZON_ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['AMAZON_SECRET_ACCESS_KEY']
+    aws.keypair_name      = 'martins-home'
+    aws.region            = 'eu-west-1'
+    aws.ami     = "ami-87654321"
+    #aws.instance_type     = 'm1.micro'
+    aws.instance_type = "t1.micro"
+    #aws.security_groups = ['default']
 
     override.ssh.username         = "martins"
   end
