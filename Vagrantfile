@@ -16,9 +16,9 @@ Vagrant.configure("2") do |config|
     aws.region            = 'eu-west-1'
     aws.ami               = "ami-6975691d"
     aws.instance_type     = "t1.micro"
-    #aws.security_groups = ['default']
-
-    override.ssh.username         = "martins"
+    config.ssh.private_key_path = "~/.ec2/martins-home.pem"
+    aws.security_groups = ['vagrant']
+    config.ssh.username = "ubuntu"
   end
 
 
