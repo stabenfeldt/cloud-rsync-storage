@@ -14,9 +14,8 @@ Vagrant.configure("2") do |config|
     aws.secret_access_key = ENV['AMAZON_SECRET_ACCESS_KEY']
     aws.keypair_name      = 'martins-home'
     aws.region            = 'eu-west-1'
-    aws.ami     = "ami-87654321"
-    #aws.instance_type     = 'm1.micro'
-    aws.instance_type = "t1.micro"
+    aws.ami               = "ami-6975691d"
+    aws.instance_type     = "t1.micro"
     #aws.security_groups = ['default']
 
     override.ssh.username         = "martins"
