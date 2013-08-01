@@ -14,6 +14,7 @@ user 'rsync' do
   username 'rsync'
   supports :manage_home => true
   home '/home/rsync'
+  shell '/bin/bash'
   action :create
 end
 
