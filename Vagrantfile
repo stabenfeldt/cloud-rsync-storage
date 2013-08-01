@@ -3,22 +3,27 @@
 
 Vagrant.configure("2") do |config|
 
-  #config.vm.box = "precise-server-cloudimg-vagrant-amd64-disk1"
-  #config.vm.network :forwarded_port, host: 4567, guest: 80
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.box               = "precise-server-cloudimg-vagrant-amd64-disk1"
+    override.vm.box_url           = "http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box"
+    override.ssh.username         = "vagrant"
+    override.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
+    vb.config.vm.network :forwarded_port, host: 4567, guest: 80
+  end
 
-  config.vm.box = "dummy"
-  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
   config.vm.provider :aws do |aws, override|
-    aws.access_key_id     = ENV['AMAZON_ACCESS_KEY_ID']
-    aws.secret_access_key = ENV['AMAZON_SECRET_ACCESS_KEY']
-    aws.keypair_name      = 'martins-home'
-    aws.region            = 'eu-west-1'
-    aws.ami               = "ami-6975691d"
-    aws.instance_type     = "t1.micro"
-    config.ssh.private_key_path = "~/.ec2/martins-home.pem"
-    aws.security_groups = ['vagrant']
-    config.ssh.username = "ubuntu"
+    override.vm.box               = "dummy"
+    override.vm.box_url           = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    aws.access_key_id             = ENV['AMAZON_ACCESS_KEY_ID']
+    aws.secret_access_key         = ENV['AMAZON_SECRET_ACCESS_KEY']
+    aws.keypair_name              = ENV['KEYPAIR_NAME'] # => my-key
+    override.ssh.private_key_path = ENV['AWS_KEY']      # => "~/.ssh/username.pem"
+    aws.region                    = 'eu-west-1'
+    aws.ami                       = "ami-6975691d"
+    aws.instance_type             = "t1.micro"
+    aws.security_groups           = ['ssh_web']
+    config.ssh.username           = "ubuntu"
   end
 
 
@@ -28,10 +33,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "apt"
-  end
-
-
-  config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "networking_basic"
     chef.add_recipe "xinitd_rsync"
     chef.node_name = "rsync-aws"
