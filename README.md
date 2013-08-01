@@ -17,30 +17,36 @@ $ vagrant up --provider=aws
   $ vagrant ssh
   # From the Vagran box run:
   $ sudo chpasswd rsync
-  $ echo rsync:new_password | sudo chpasswd```   # [1]
+  $ echo rsync:new_password | sudo chpasswd   # [1]
   # Collect the external IP for the instance **
   $ ec2metadata | grep public-hostname
 ```
 
-[1] Not really a good approach, as the password is stored in the bash_history. Let's do it like this untill we have figured out of the terminal issues.
+*[1] Not really a good approach, as the password is stored in the bash_history. Let's do it like this untill we have figured out of the terminal issues.*
 
 
-** Copy your ssh keys to the rsync user, so you don't need to type a password every time **
+**Copy your ssh keys to the rsync user, so you don't need to type a password every time**
+```bash
 # On the machine you're going to run the backup from
 $ cat ~/.ssh/id_rsa.pub | pbcopy
 $ vagrant ssh
 $ sudo su - rsync
 $ cat > .ssh/authorized_keys    # Paste the content of your id_rsa.pub file here..
+```
 
 
-
-** If you want to ssh into your Vagrant running in a Virtualbox at your computer
+**If you want to ssh into your Vagrant running in a Virtualbox at your computer**
+```bash
 ssh 127.0.0.1 -p 2222 -l vagrant -i ~/.vagrant.d/insecure_private_key
 ssh 127.0.0.1 -p 2222 -l rsync  'mkdir ~rsync/BACKUP/make'
+```
 
-# Test rsync to VM
-$ rsync --dry-run --delete -azvv -e ssh ~/Work/RubyMotion  rsync@127.0.0.1:BACKUP/make/   --rsh='ssh -p2222'
+**Test rsync to VM  (with the dry-run)**
+```bash
+$ rsync --dry-run --delete -azvv -e ssh ~/FolderToBackup  rsync@127.0.0.1:BACKUP/ --rsh='ssh -p2222'
+````
 
-# Do an actual backup to the cloud server
-rsync --dry-run --delete -azvv -e ssh ~/Work/RubyMotion  rsync@ec2-54-229-123-203.eu-west-1.compute.amazonaws.com:BACKUP/make/
-
+**Do an actual backup to the cloud server (without the dry-run)**
+```bash
+rsync --delete -azvv -e ssh ~/Work/RubyMotion  rsync@XXXX.compute.amazonaws.com:BACKUP/make/
+```
