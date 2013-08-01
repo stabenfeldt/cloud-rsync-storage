@@ -38,15 +38,14 @@ $ cat > .ssh/authorized_keys    # Paste the content of your id_rsa.pub file here
 **If you want to ssh into your Vagrant running in a Virtualbox at your computer**
 ```bash
 ssh 127.0.0.1 -p 2222 -l vagrant -i ~/.vagrant.d/insecure_private_key
-ssh 127.0.0.1 -p 2222 -l rsync  'mkdir ~rsync/BACKUP/make'
 ```
 
-**Test rsync to VM  (with the dry-run)**
+**Test rsync to Virtualbox  (with the dry-run)**
 ```bash
 $ rsync --dry-run --delete -azvv -e ssh ~/FolderToBackup  rsync@127.0.0.1:BACKUP/ --rsh='ssh -p2222'
 ````
 
 **Do an actual backup to the cloud server (without the dry-run)**
 ```bash
-rsync --delete -azvv -e ssh ~/Work/RubyMotion  rsync@XXXX.compute.amazonaws.com:BACKUP/make/
+rsync --delete -azvv -e ssh ~/FolderToBackup  rsync@XXXX.compute.amazonaws.com:BACKUP/
 ```
