@@ -5,49 +5,42 @@ cloud-rsync-storage
 
 **Requirements**
 * Install Vagrant and Virtualbox
-* Download the box we´re going to use:
 
-```bash
-
-$ vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
-$ vagrant box add precise-server-cloudimg-vagrant-amd64-disk1  \
-  http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box
-```
 
 ```bash
 $ vagrant plugin install vagrant-aws
-$ vagrant up
-$ vagrant ssh
+$ vagrant up --provider=aws
 ```
 
 **Create a password for the rsync user**
 ```bash
+  $ vagrant ssh
+  # From the Vagran box run:
   $ sudo chpasswd rsync
+  $ echo rsync:new_password | sudo chpasswd```   # [1]
+  # Collect the external IP for the instance **
+  $ ec2metadata | grep public-hostname
 ```
 
+[1] Not really a good approach, as the password is stored in the bash_history. Let's do it like this untill we have figured out of the terminal issues.
+
+
+** Copy your ssh keys to the rsync user, so you don't need to type a password every time **
+# On the machine you're going to run the backup from
+$ cat ~/.ssh/id_rsa.pub | pbcopy
+$ vagrant ssh
+$ sudo su - rsync
+$ cat > .ssh/authorized_keys    # Paste the content of your id_rsa.pub file here..
 
 
 
-➜  Vagrant git:(master) ✗ brew install ec2-ami-tools
-Warning: Your Xcode (4.6) is outdated
-Please install Xcode 4.6.2.
-==> Downloading http://ec2-downloads.s3.amazonaws.com/ec2-ami-tools-1.4.0.9.zip
-######################################################################## 100.0%
-==> Caveats
-Before you can use these tools you must export some variables to your $SHELL
-and download your X.509 certificate and private key from Amazon Web Services.
+** If you want to ssh into your Vagrant running in a Virtualbox at your computer
+ssh 127.0.0.1 -p 2222 -l vagrant -i ~/.vagrant.d/insecure_private_key
+ssh 127.0.0.1 -p 2222 -l rsync  'mkdir ~rsync/BACKUP/make'
 
-Your certificate and private key are available at:
-http://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
+# Test rsync to VM
+$ rsync --dry-run --delete -azvv -e ssh ~/Work/RubyMotion  rsync@127.0.0.1:BACKUP/make/   --rsh='ssh -p2222'
 
-Download two ".pem" files, one starting with `pk-`, and one starting with `cert-`.
-You need to put both into a folder in your home directory, `~/.ec2`.
+# Do an actual backup to the cloud server
+rsync --dry-run --delete -azvv -e ssh ~/Work/RubyMotion  rsync@ec2-54-229-123-203.eu-west-1.compute.amazonaws.com:BACKUP/make/
 
-To export the needed variables, add them to your dotfiles.
- * On Bash, add them to `~/.bash_profile`.
- * On Zsh, add them to `~/.zprofile` instead.
-
-export JAVA_HOME="$(/usr/libexec/java_home)"
-export EC2_PRIVATE_KEY="$(/bin/ls "$HOME"/.ec2/pk-*.pem | /usr/bin/head -1)"
-export EC2_CERT="$(/bin/ls "$HOME"/.ec2/cert-*.pem | /usr/bin/head -1)"
-export EC2_AMITOOL_HOME="/usr/local/Library/LinkedKegs/ec2-ami-tools/jars"
