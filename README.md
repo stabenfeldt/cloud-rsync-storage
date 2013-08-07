@@ -37,7 +37,8 @@ $ cat > .ssh/authorized_keys    # Paste the content of your id_rsa.pub file here
 
 **If you want to ssh into your Vagrant running in a Virtualbox at your computer**
 ```bash
-ssh 127.0.0.1 -p 2222 -l vagrant -i ~/.vagrant.d/insecure_private_key
+$ vagrant ssh # => Shortcut for:
+$ ssh 127.0.0.1 -p 2222 -l vagrant -i ~/.vagrant.d/insecure_private_key
 ```
 
 **Test rsync to Virtualbox  (with the dry-run)**
