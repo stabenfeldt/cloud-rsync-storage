@@ -22,7 +22,7 @@ $ vagrant up --provider=aws
   $ ec2metadata | grep public-hostname
 ```
 
-*[1] Not really a good approach, as the password is stored in the bash_history. Let's do it like this untill we have figured out of the terminal issues.*
+*[1] Not really a good approach, as the password is stored in the bash_history. Let's do it like this untill we have resolved the terminal issues.*
 
 
 **Copy your ssh keys to the rsync user, so you don't need to type a password every time**
